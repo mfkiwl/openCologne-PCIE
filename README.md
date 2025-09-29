@@ -1,27 +1,26 @@
 This project is the direct continuation of [openCologne](https://github.com/chili-chips-ba/openCologne), and it also firmly ties into [openPCIE](https://github.com/chili-chips-ba/openpcie).
 
-The project aims to take _openCologne_ to a new level, not only by introducing the `soft PCIE EndPoint core` to the GameMate portfolio, but also by challenging and testing the new, fully opensource [nextPNR](https://github.com/YosysHQ/prjpeppercorn) flow.
-
-It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This is indeed the only opensource soft PCIE protocol stack at the moment.
-
-This soft PCIE EP core comes with unique `HW/SW co-sim` and two `PCIE cards for GateMate`. The new boards can work with all three device variants: A1, A2, A4 and are plug-and-play compatible with the vast assortment of 3rd-party carriers, including our opensource `[PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane)`. 
-
-The project aims for integration with LiteX, by expanding the `[LitePCIE](https://github.com/enjoy-digital/litepcie)` portfolio, thus creating a basis for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
-
-
 <p align="center" width="100%">
   <img width="25%" src="0.doc/artwork/openCologne-PCIE.png">
 </p>
 
-We must also note that this project is about creating a **minimal, opensource soft PCIE EP stack**. Its scope is therefore limited to a demonstration of the `PIO writes and reads` only. Other applications, such as DMA, are not amongst our deliverables, but can later on be built on top of it.
+The project aims to take _openCologne_ to a new level, not only by introducing the `soft PCIE EndPoint core` to the GateMate portfolio, but also by challenging and testing the new, fully opensource [nextPNR](https://github.com/YosysHQ/prjpeppercorn) flow.
+
+It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This is the only soft PCIE protocol stack that's in opensource at the moment.
+
+This soft PCIE EP core comes with unique `HW/SW co-sim` and two `PCIE cards for GateMate`. The new boards can work with all three device variants: A1, A2, A4 and are plug-and-play compatible with the vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
+
+The project aims for integration with LiteX, by expanding the [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio, thus creating a basis for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
+
+We must also note that this project is about creating a **minimal PCIE EP stack**. Its scope is therefore limited to a demonstration of the `PIO writes and reads` only. Other applications, such as DMA, are not our deliverable, but can later on be created on top of them.
 
 Power states and transitions are also not supported.
 
 While our commitment is to deliver the `Gen1` EP, the design will from the get-go support the Gen2 throughput. We intend to try to bring up the Gen2 on the best-effort bases, as a bonus. However, the procedures for automatic up and down training of the link speed will not be implemented.
 
-We will `only support x1 (single-lane)` PCIE links. The link width training will therefore be omitted.
+We will `only support x1 (single-lane)` PCIE links. The procedure for adjusting the link width will therefore be omitted.
 
-> GateMate die has only one SerDes anyway. While, in theory, the A2 could support 2-lane PCIE, that would turn everything on its head and become a major project on its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack, the A2 and A4 come into play as the providers of the logic resources needed to implement the final user app.
+> GateMate die has only one SerDes anyway. While, in theory, the A2 could support the 2-lane PCIE, that would turn everything on its head and become a major project on its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack, the A2 and A4 come into play as the providers of the logic resources needed to implement the final user app.
 
 ![PCIE Stack](0.doc/pcie-ep-top-stack.png)
 
@@ -34,7 +33,7 @@ We will `only support x1 (single-lane)` PCIE links. The link width training will
 
 ![PHY Layers](0.doc/images/PHY-Layers.JPG)
 
-The GateMate SerDes has thus far not been used in the PCIE context. It is reasonable to expect issues with physical layer, which may therefore falter for signal integrity, jitter, or some other reasons. Luckily, the project has teamed up with Cologne Chip developers, who will own the PHY layer up to and including the PIPE :thumbup:.
+The GateMate SerDes has thus far not been used in the PCIE context. It is reasonable to expect issues with physical layer, which may therefore falter for signal integrity, jitter, or some other reasons. Luckily, the project has teamed up with Cologne Chip developers, who will own the PHY layer up to and including the PIPE 👍.
 
 The PHY and PIPE have a separate workspace, see `2.rtl.PHY`.
 
@@ -47,7 +46,7 @@ When we think about roadmap and our possible future growth paths, in addition to
 
 - enablement of hardware acceleration for AI, Video, and general DSP compute workloads
 - bolting onto [ztachip](https://github.com/ztachip/ztachip), to then look into acceleration of the PC host Python
-> This borrows from Xilinx PYNQ framework and Alveo platform, where programmable [DPUs](https://www.amd.com/en/products/adaptive-socs-and-fpgas/intellectual-property/dpu.html) are used for quick mapping of algorithms into acceleration hardware, avoiding the time-consuming process of RTL design and validation. Such a combination would then make for the first-ever open source "DPU" co-processor, and also works hand-in-hand with M.2 card variant. After all, the M.2 NiteFury and SQRL Acorn CLE 215+ M.2 cards were made for acceleration of crypto mining
+> This borrows from Xilinx PYNQ framework and Alveo platform, where programmable [DPUs](https://www.amd.com/en/products/adaptive-socs-and-fpgas/intellectual-property/dpu.html) are used for quick mapping of algorithms into acceleration hardware, avoiding the time-consuming process of RTL design and validation. Such a combination would then make for the first-ever opensource "DPU" co-processor, and also works hand-in-hand with M.2 card variant. After all, the M.2 NiteFury and SQRL Acorn CLE 215+ M.2 cards were made for acceleration of crypto mining
 - possibly also tackling the SerDes HM building brick.
 
 
@@ -66,7 +65,7 @@ When we think about roadmap and our possible future growth paths, in addition to
 - [Anes' PCIE EP](https://github.com/chili-chips-ba/openPCIE/tree/main/2.rtl)
 - [PCIE EP DMA - Wupper](https://gitlab.nikhef.nl/franss/wupper)
 
-Note: "opensource" PCIE EP designs in the above references are not truly opensource. They all rely on vendor-proprietary PCIE Hard Macro (HM), which is a black box, with insides invisible and inaccessible to the user, and also not portable to other FPGA families.
+Note: "opensource" PCIE EP designs in the above references are not truly opensource. They all rely on vendor-proprietary PCIE HM, which is a black box, whose insides are invisible and inaccessible to the user, and also not portable to other FPGA families.
 
 
 
@@ -90,8 +89,8 @@ Note: "opensource" PCIE EP designs in the above references are not truly opensou
 >- [ ] M.2  RevB
  
 - [ ] Develop opensource PHY with PIPE interface for GateMate SerDes
->- [] x1, Gen1
->- [] x1, Gen2 (best-effort, bonus if we do it)
+>- [ ] x1, Gen1
+>- [ ] x1, Gen2 (best-effort, bonus if we do it)
 
 - [ ] Develop opensource RTL for PCIE EP DataLink Layer with PIPE interface
 - [ ] Develop opensource RTL for PCIE EP Transport Layer
@@ -102,9 +101,11 @@ Note: "opensource" PCIE EP designs in the above references are not truly opensou
 > - [ ] Software driver and TestApp
 > - [ ] Debug and bringup
 
-- [ ] Implement it all in GateMate, pushing it through PNR and timing closure. Work with nextpnr/ProjectPeppercorn developers to identify and resolve issues
+- [ ] Implement it all in GateMate, pushing it through nextPNR and timing closure
+> - [ ] Work with nextpnr/ProjectPeppercorn developers to identify and resolve issues
 
 - [ ] Port to LiteX
+> - [ ] Work with LiteX developers to resolve issues
 
 - [ ] Present project challenges and achievements at (at least) two trade fairs or conference
 >- [ ] FPGA Conference Europe
