@@ -1,52 +1,50 @@
 This project is the direct continuation of [openCologne](https://github.com/chili-chips-ba/openCologne), and it also firmly ties into [openPCIE](https://github.com/chili-chips-ba/openpcie).
 
-<p align="center" width="100%">
-  <img width="25%" src="0.doc/artwork/openCologne-PCIE.png">
+The project aims to take _openCologne_ to a new level, not only by introducing **soft PCIE EndPoint core** to GateMate portfolio, but also by challenging and validating the new, fully opensource [nextPNR](https://github.com/YosysHQ/prjpeppercorn) tool suite.
+
+It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This would be the only soft PCIE protocol stack in opensource at the moment.
+
+Our soft PCIE EP core comes with unique **HW/SW co-sim** and two **PCIE cards for GateMate**. The new boards can work with all three device variants: A1, A2, A4 and are plug-and-play compatible with vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
+
+The project aims for integration with LiteX, by expanding the [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio, therefore creating a basis for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
+
+
+<p align="center">
+  <img width="30%" src="0.doc/artwork/openCologne-PCIE.png">
 </p>
 
-The project aims to take _openCologne_ to a new level, not only by introducing the `soft PCIE EndPoint core` to the GateMate portfolio, but also by challenging and testing the new, fully opensource [nextPNR](https://github.com/YosysHQ/prjpeppercorn) flow.
-
-It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This is the only soft PCIE protocol stack that's in opensource at the moment.
-
-This soft PCIE EP core comes with unique `HW/SW co-sim` and two `PCIE cards for GateMate`. The new boards can work with all three device variants: A1, A2, A4 and are plug-and-play compatible with the vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
-
-The project aims for integration with LiteX, by expanding the [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio, thus creating a basis for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
-
-We must also note that this project is about creating a **minimal PCIE EP stack**. Its scope is therefore limited to a demonstration of the `PIO writes and reads` only. Other applications, such as DMA, are not our deliverable, but can later on be created on top of them.
+Let's also note that this project is about creating a **minimal** PCIE EP stack. Its scope is therefore limited to a demonstration of the **PIO writes and reads** only. Other applications, such as DMA, are not in our deliverables, but can later on be built on top of the stack that the project is about delivering.
 
 Power states and transitions are also not supported.
 
-While our commitment is to deliver the `Gen1` EP, the design will from the get-go support the Gen2 throughput. We intend to try to bring up the Gen2 on the best-effort bases, as a bonus. However, the procedures for automatic up and down training of the link speed will not be implemented.
+While our commitment is to produce a **`Gen1`** EP, the design will from the get-go support Gen2 throughput. We intend to try to bring up the Gen2 on the best-effort bases, as a bonus. However, the procedures for automatic up- and down- training of the link speed will not be implemented.
 
-We will `only support x1 (single-lane)` PCIE links. The procedure for adjusting the link width will therefore be omitted.
+We **`only support x1 (single-lane)`** PCIE links. The link width training is therefore omitted.
 
-> GateMate die has only one SerDes anyway. While, in theory, the A2 could support the 2-lane PCIE, that would turn everything on its head and become a major project on its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack, the A2 and A4 come into play as the providers of the logic resources needed to implement the final user app.
+> GateMate die (A1) does not offer more than one SerDes anyway. While, in theory, the two-die A2 could support a 2-lane PCIE, that would turn everything on its head and become a major project of its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack alone, the A2 and A4 chips come into play as logic resources for implementation of the final user app.
 
 ![PCIE Stack](0.doc/pcie-ep-top-stack.png)
 
 
 --------------------
-# PIPE
+# PIPE (is not a dream)
 
-### References
-- [Warp-pipe: PCIe network simulator](https://github.com/antmicro/warp-pipe)
+<p align="center">
+  <img width="60%" src="0.doc/images/PHY-Layers.JPG">
+</p>
 
-![PHY Layers](0.doc/images/PHY-Layers.JPG)
+The GateMate SerDes has thus far not been used in the PCIE context. It is therefore reasonable to expect issues with physical layer, which may falter for signal integrity, jitter, or some other reasons. Luckily, the project has teamed up with CologneChip developers, who will own the PHY layer up to and including the PIPE 👍. We have even separated their technology-specific work into a directory of its own, see **`2.rtl.PHY`**.
 
-The GateMate SerDes has thus far not been used in the PCIE context. It is reasonable to expect issues with physical layer, which may therefore falter for signal integrity, jitter, or some other reasons. Luckily, the project has teamed up with Cologne Chip developers, who will own the PHY layer up to and including the PIPE 👍.
-
-The PHY and PIPE have a separate workspace, see `2.rtl.PHY`.
-
-> By designing to PIPE (Physical Interface for PCI Express) architecture, we can clearly separate the generic (i.e. "logic" only) from the FPGA-specific RTL. This does not mean that all of our RTL is portable to other vendors, but rather that it's structured in a way that facilitates future ports. It is typically the code on the physical side of the PIPE interface that will need to be revisited. As that's only a subsection of the complete design, we will have thereby saved a good chunk of the porting effort.
+> By adhering to PIPE (**P**hysical **I**nterface for **P**CI **E**xpress) architecture, we can clearly separate the generic (i.e. "logic" only) from the FPGA-specific RTL. This does not mean that all of our RTL is portable to other vendors, but rather that it's structured in a way that facilitates future ports, with thin later of code on the physical side of the PIPE interface that will typically need to be revisited. As that's only a subsection of the overall design, we will have thereby saved a good chunk of porting effort.
 
 
 ## Future outlook
 
-When we think about roadmap and our possible future growth paths, in addition to the aforementioned DMA and porting to other FPGA families and ASICs, we are also thinking of:
+Reflecting on our roadmap and possible future growth paths, in addition to the aforementioned DMA and porting to other FPGA families + ASICs, we are also thinking of:
 
-- enablement of hardware acceleration for AI, Video, and general DSP compute workloads
-- bolting onto [ztachip](https://github.com/ztachip/ztachip), to then look into acceleration of the PC host Python
-> This borrows from Xilinx PYNQ framework and Alveo platform, where programmable [DPUs](https://www.amd.com/en/products/adaptive-socs-and-fpgas/intellectual-property/dpu.html) are used for quick mapping of algorithms into acceleration hardware, avoiding the time-consuming process of RTL design and validation. Such a combination would then make for the first-ever opensource "DPU" co-processor, and also works hand-in-hand with M.2 card variant. After all, the M.2 NiteFury and SQRL Acorn CLE 215+ M.2 cards were made for acceleration of crypto mining
+- enablement of hardware acceleration for AI, video, and general DSP compute workloads
+- bolting our PCIE EP to [ztachip](https://github.com/ztachip/ztachip), to then look into acceleration of the PC host Python
+> This borrows from Xilinx PYNQ framework and Alveo platform, where programmable [DPUs](https://www.amd.com/en/products/adaptive-socs-and-fpgas/intellectual-property/dpu.html) are used for quick mapping of algorithms into acceleration hardware, avoiding the time-consuming process of RTL design and validation. Such a combination would then make for the first-ever opensource "DPU" co-processor, and would also work hand-in-hand with M.2 card variant. After all, the M.2 NiteFury and SQRL Acorn CLE 215+ M.2 cards were made for acceleration of crypto mining
 - possibly also tackling the SerDes HM building brick.
 
 
@@ -64,9 +62,10 @@ When we think about roadmap and our possible future growth paths, in addition to
 - [Regymm's PCIE_7x EP](https://github.com/regymm/pcie_7x)
 - [Anes' PCIE EP](https://github.com/chili-chips-ba/openPCIE/tree/main/2.rtl)
 - [PCIE EP DMA - Wupper](https://gitlab.nikhef.nl/franss/wupper)
+- [Warp-pipe: PCIe network simulator](https://github.com/antmicro/warp-pipe)
 
-Note: "opensource" PCIE EP designs in the above references are not truly opensource. They all rely on vendor-proprietary PCIE HM, which is a black box, whose insides are invisible and inaccessible to the user, and also not portable to other FPGA families.
-
+<ins>Note:</ins>
+_"opensource"_ PCIE EP designs in the above references are not truly opensource. They all rely on vendor-proprietary **PCIE HM**, which is a black box that provides _Transport Layer_ (TL) and _Data Link Layer_ (DLL) protocol stack. The insides of it are invisible and inaccessible to users, and also not portable to other FPGA families. We intend to fully replace that PCIE HM with soft, unencrypted, free to use and modify Verilog RTL. Like us, they also have SerDes HM.
 
 
 --------------------
@@ -76,7 +75,7 @@ Note: "opensource" PCIE EP designs in the above references are not truly opensou
 - [x] Procure Test equipment, test fixtures, dev boards and accessories
 
 - [ ] Create docs and diagrams that are easy to follow and comprehend
->- [ ] RTL DL and TL
+>- [ ] RTL DLL and TL
 >- [ ] PIPE
 >- [ ] SW
 >- [ ] TB, Sim, VIP
@@ -90,10 +89,10 @@ Note: "opensource" PCIE EP designs in the above references are not truly opensou
  
 - [ ] Develop opensource PHY with PIPE interface for GateMate SerDes
 >- [ ] x1, Gen1
->- [ ] x1, Gen2 (best-effort, bonus if we do it)
+>- [ ] x1, Gen2 (best-effort, it's a bonus if we make it)
 
-- [ ] Develop opensource RTL for PCIE EP DataLink Layer with PIPE interface
-- [ ] Develop opensource RTL for PCIE EP Transport Layer
+- [ ] Develop opensource RTL for PCIE EP DLL with PIPE interface
+- [ ] Develop opensource RTL for PCIE EP TL
 
 - [ ] Create comprehensive co-sim testbench
 
@@ -101,15 +100,16 @@ Note: "opensource" PCIE EP designs in the above references are not truly opensou
 > - [ ] Software driver and TestApp
 > - [ ] Debug and bringup
 
-- [ ] Implement it all in GateMate, pushing it through nextPNR and timing closure
+- [ ] Implement it all in GateMate, pushing through PNR and timing closure
 > - [ ] Work with nextpnr/ProjectPeppercorn developers to identify and resolve issues
 
 - [ ] Port to LiteX
-> - [ ] Work with LiteX developers to resolve issues
 
 - [ ] Present project challenges and achievements at (at least) two trade fairs or conference
->- [ ] FPGA Conference Europe
->- [ ] Electronica
+>- [ ] FPGA Conference Europe, Munich
+>- [ ] Electronica, Munich
+>- [ ] FPGA Developer Forum, CERN
+>- [ ] Embedded World, Nuremberg
 
 
 --------------------
@@ -119,16 +119,16 @@ Note: "opensource" PCIE EP designs in the above references are not truly opensou
 - [ULX4M-PCIe-IO](https://github.com/intergalaktik/ULX4M-PCIe-IO)
 - [openPCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb)
 - [NiteFury-and-LiteFury](https://github.com/RHSResearchLLC/NiteFury-and-LiteFury)
-- [4-port M.2](https://github.com/will127534/CM4-Nvme-NAS)
+- [4-port M.2 PCIE Switch](https://github.com/will127534/CM4-Nvme-NAS)
 - [AntMicro EMS Sim](https://antmicro.com/blog/2025/07/recent-improvements-to-antmicros-signal-integrity-simulation-flow)
 - [openEMS](https://docs.openems.de)
 
-The PCB part of the project shall deliver two cards: GateMate in the (i) PCIE "Slot" and (ii) M.2 form-factors
+The PCB part of the project shall deliver two cards: GateMate in **(i) PCIE "Slot"** and **(ii) M.2** form-factors
 
 ![i-Slot](0.doc/images/PCIE-Slot-Connector.JPG)
 ![ii-M.2, similar to NiteFury (shown)](0.doc/images/NiteFury-PCIE-M2.JPG)
 
-While the "Slot" variant could have been skipped by using one of the ready=made adapters, it is more practical and less expensive not to have an interposer. “Slot” is still the dominant PCIE form-factor for desktops and servers. The M.2 is typically found in the laptops.
+While the "Slot" variant is not absolutely necessary and could have been suplanted by using one of the ready-made adapters, it is more practical and less expensive not to have an interposer. “Slot” is still the dominant PCIE form-factor for desktops and servers. The M.2 is typically found in the laptops.
 
 ![M.2 to Slot adapter](0.doc/images/PCIE-Slot-to-M2-adapter.JPG)
 
@@ -137,25 +137,22 @@ Initially, we will use the existing [CM4 ULX4M](https://github.com/intergalaktik
 ![CM4 I/O with PCIE "Slot" connector](0.doc/images/CM4-IO-with-PCIE-Slot.jpg)
 ![CM4 I/O with PCIE M.2 connector](0.doc/images/CM4-IO-with-PCIE-M2.jpg)
 
-As our two new boards are becoming ready, we will gradually switch to openPCIE backplane which features:
+With our two new boards becoming ready, we will be gradually switching to openPCIE backplane which features:
 - "Slots" on one side
 - M.2s on the other
 - RootComplex as a plug-in card, for interoperability testing with [RaspberryPi](https://www.raspberrypi.com) and Xilinx Artix-7 .
-- on-board (soldered-down) PCIE Switch for interoperability testing of the most typical use-case, which is when RootPort is not directly connected to EndPoints
+- on-board (soldered-down) PCIE Switch for interoperability testing the most typical use-case, which is when RootPort is not directly connected to EndPoints
 
-As the final step, we will test them within PC host, using both "Slot" and M.2 connectivity options.
+In the final step, we will test them within PC host, using both "Slot" and M.2 connectivity options.
 
 ![Interop with RPI5.png](0.doc/images/PCIE-interop-with-RPI5.jpg)
  
 For additional detail, please jump to [1.pcb/README.md](1.pcb/README.md)
 
 
-
 --------------------
 
 # RTL Architecture
-
-#### References:
 
 For additional detail, please jump to [2.rtl/README.md](2.rtl/README.md)
 
@@ -164,17 +161,15 @@ For additional detail, please jump to [2.rtl/README.md](2.rtl/README.md)
 
 # SW Architecture
 
-#### References
-
+#### References:
 - Using [bysybox (devmem)](0.doc/using-busybox-devmem-for-reg-access.txt) for register access
 - [Yocto](https://www.yoctoproject.org) and [Buildroot](https://buildroot.org)
 - [PCIE Utils](https://mj.ucw.cz/sw/pciutils)
 - [Debug PCIE issues using 'lspci' and 'setpci'](https://adaptivesupport.amd.com/s/article/1148199?language=en_US)
 
-The purpose of the "Test App" is to put all hardware and software elements of the system together, and to demonstrate how it works in a typical end-to-end use case. It will enumerate and configure the End Point, then perform the PIO write-read-validate transactions over PCIE, perhaps toggling some LEDs. It is envisioned as a getting-started example for how to build more complex PCIE applications.
+The purpose of the "Test App" is to put all hardware and software elements of the system together, and to demonstrate how it works in a typical end-to-end use case. The Test App will enumerate and configure the EndPoint, then perform a series of the PIO write-read-validate transactions over PCIE, perhaps toggling some LEDs. It is envisioned as a getting-started example for how to build more complex PCIE applications.
 
-For as much as we’d like to make it 100% baremetal, i.e. fully decoupled from an underlying OS, Linux comes with such a rich set of PCIE goodies that it might be hard to write it all from scratch. It is therefore still TDB whether we will go _baremetal_, _bare-Linux_ /* minimal, specifically built by us to fit project needs */, _busybox_, or some other clever way that alleviates standard Linux requirement for a hardware MMU. 
-
+For as much as we’d like to make it 100% baremetal, i.e. fully decoupled from an underlying OS, Linux comes with such a rich set of PCIE goodies that it might be hard to write it all from scratch. It is therefore still TDB whether we will go _baremetal_, _bare-Linux_ /*minimal, specifically built by us to fit project needs*/, _busybox_, or some other clever way that alleviates standard Linux requirement for a hardware MMU. 
 
 For additional detail, please jump to [3.sw/README.md](3.sw/README.md)
 
@@ -188,7 +183,7 @@ For additional detail, please jump to [3.sw/README.md](3.sw/README.md)
 
 ## Simulation Test Bench
 
-The [openpcue2-rc test bench](5.sim/README.md) aims to have a flexible approach to simulation which allows a common test environment to be used whilst selecting between alternative CPU components, one of which uses the [_VProc_ virtual processor](https://github.com/wyvernSemi/vproc) co-simulation element. This allows simulations to be fully HDL, with a RISC-V processor RTL implementation such as picoRV32, IBEX or EDUBOS5, or to co-simulate software using the virtual processor, with a significant speed up in simulation times. The test bench has the following features:
+The [openpcue2-rc test bench](5.sim/README.md) aims to have a flexible approach to simulation which allows a common test environment to be used whilst selecting between alternative CPU components, one of which uses the [_VProc_ virtual processor](https://github.com/wyvernSemi/vproc) co-simulation element. This allows simulations to be fully HDL, with a RISC-V processor RTL implementation such as picoRV32, Ibex or eduBOS5, or to co-simulate software using the virtual processor, with a significant speed up in simulation times. The test bench has the following features:
 
 * A [_VProc_](https://github.com/wyvernSemi/vproc) virtual processor based [`soc_cpu.VPROC`](5.sim/models/README.md#soc-cpu-vproc) component
   * [Selectable](5.sim/README.md#auto-selection-of-soc_cpu-component) between this or an RTL softcore
@@ -203,7 +198,7 @@ The [openpcue2-rc test bench](5.sim/README.md) aims to have a flexible approach 
 The figure below shows an oveview block diagram of the test bench HDL.
 
 <p align="center">
-<img src="5.sim/images/opencologne-pcie-tb.png" width=800>
+    <img width="60%" src="5.sim/images/opencologne-pcie-tb.png">
 </p>
 
 More details on the architecture and usage of the test bench can be found in the [README.md](5.sim/README.md) in the `5.sim` directory.
@@ -224,7 +219,6 @@ See [4.build/README.md](4.build/README.md)
 --------------------
 
 # Debug, Bringup, Testing
-
 
 After programming the FPGA with the generated bitstream, the system was tested in a real-world environment to verify its functionality. The verification process was conducted in three main stages.
 
@@ -347,17 +341,17 @@ The **wyvernSemi**'s wisdom and contribution made a great deal of difference -- 
 
 ### Community outreach
 
-It is in a way more important that the community knows about such-and-such project or IP, than for the code to it exists in some obscure repo. Without awareness, which comes through presentations, postings, conferences, ..., the work that went into delivering the technical content is not fully accomplished.
+It is in a way more important for the dev community to know about such-and-such project or IP, than for the code to exists in some repo. Without awareness, which comes through presentations, postings, conferences, ..., the work that went into creating technical content is not fully accomplished.
 
-We therefore plan on putting time and effort into community outreach, and so through multiple venues. One of them is the presence at industry fairs and conferences, such as:
+We therefore plan on putting some time and effort into community outreach through multiple venues. One of them is the presence at industry fairs and conferences, such as:
 
-- [Embedded World 2026, Nuremberg](https://www.embedded-world.de/en). This is a trade fair where CologneChip will host a booth! This trade show also features a conference track.
+- **[Embedded World 2026, Nuremberg](https://www.embedded-world.de/en)**. This is a trade fair where CologneChip will host a booth! This trade show also features a conference track.
 
-- [FPGA Conference, Munich](https://www.fpga-conference.eu). Cologne Chip is one of the sponsors and therefore get at least 2 presentation slots.
+- **[FPGA Conference 2026, Munich](https://www.fpga-conference.eu)**. Cologne Chip is one of the sponsors and therefore get at least 2 presentation slots.
 
-- [Electronica 2026, Munich](https://electronica.de/en). It is very likely that CologneChip will have a booth. There is also a conference track.
+- **[Electronica 2026, Munich](https://electronica.de/en)**. It is very likely that CologneChip will have a booth. There is also a conference track.
 
-- [FPGA Developer Forum, CERN, Geneva](https://indico.cern.ch/event/1467417). Cologne Chip is a sponsor. They might get presentation slots 
+- **[FPGA Developer Forum, CERN, Geneva](https://indico.cern.ch/event/1467417)**. Cologne Chip is a sponsor. They might get presentation slots 
 
 We are fully open to consider additional venues -- Please reach out and send your ideas!
 
