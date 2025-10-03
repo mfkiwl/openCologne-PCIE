@@ -145,15 +145,13 @@ With our two new boards becoming ready, we will be gradually switching to openPC
 - Slots on one side
 - M.2s on the other
 - RootComplex as a plug-in card, for interoperability testing with [RaspberryPi](https://www.raspberrypi.com) and Xilinx Artix-7 .
-- on-board (soldered-down) PCIE Switch for interoperability testing the most typical use-case, which is when RootPort is not directly connected to EndPoints
-
-In the final step, we will test them within PC host, using both "Slot" and M.2 connectivity options.
+- on-board (soldered-down) PCIE Switch for interoperability testing in the most typical use-case, which is when RootPort is not directly connected to EndPoints, but goes through a Switch.
 
 <p align="center">
   <img width="40%" src="0.doc/images/PCIE-interop-with-RPI5.png">
 </p>
 
-For additional detail, please jump to [1.pcb/README.md](1.pcb/README.md)
+In the final step, we intend to test them within PC host, using both "Slot" and M.2 connectivity options. For additional detail, please jump to [1.pcb/README.md](1.pcb/README.md)
 
 
 --------------------
