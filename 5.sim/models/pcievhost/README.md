@@ -39,11 +39,11 @@ A Verilog module for the _pcievhost_ model is provided in a `pcieVHost.v` file i
 <img width=600 src="images/pcievhost_module.png">
 </p>
 
-The module's clock and reset must be synchronous (i.e. the reset originate from the same clock domain) and the clock run at the PCIe raw bit rate $\div$ 10. So for GEN1 this is 500MHz (2000ps period) and GEN2 this is 1000MHz (1000ps period).
+The module's clock and reset must be synchronous (i.e. the reset originate from the same clock domain) and the clock run at the PCIe raw bit rate $\div$ 10. So for GEN1 this is 250MHz (4000ps period) and GEN2 this is 500MHz (2000ps period).
 
-The model, by default, transfers 8b10b encoded data but can be configured in the software to generate unencoded and unscrambled data, where bits 7:0 are a byte value, and bit 8 is a 'K' symbol flag when set, and this configuration must be done for the _openpcie2-rc_ project.
+The model, by default, transfers 8b10b encoded data but can be configured in the software to generate unencoded and unscrambled data, where bits 7:0 are a byte value, and bit 8 is a 'K' symbol flag when set, and this configuration must be done for the _openCologne-PCIE_ project.
 
-The _pcieVHost_ component has three Parameters to configure the model. The first, `LinkWidth`, configures which lanes will be active and always starts from lane 0, defaulting to all 16 lanes. For _openpcie2-rc_, this is hardwired to 1 inside `pcieVHostPipex1`.  Note that the ports for the unused lanes are still present but can be left unconnected. The second parameter is `EndPoint`. This is used to enable endpoint features in the model and does so if set to a non-zero value, with 0 being the default setting. For _openpcie2-rc_, this should be set to 1. Finally the `NodeNum` parameter sets the node number of the internal _VProc_ component. Each instantiated _VProc_, whether part of a _pcievhost_ model, or not, must have a unique node number to associate itself with a particular user program. The default value for `NodeNum` is 8.
+The _pcieVHost_ component has three Parameters to configure the model. The first, `LinkWidth`, configures which lanes will be active and always starts from lane 0, defaulting to all 16 lanes. For _openCologne-PCIE_, this is hardwired to 1 inside `pcieVHostPipex1`.  Note that the ports for the unused lanes are still present but can be left unconnected. The second parameter is `EndPoint`. This is used to enable endpoint features in the model and does so if set to a non-zero value, with 0 being the default setting. For _openCologne-PCIE_, this should be set to 1. Finally the `NodeNum` parameter sets the node number of the internal _VProc_ component. Each instantiated _VProc_, whether part of a _pcievhost_ model, or not, must have a unique node number to associate itself with a particular user program. The default value for `NodeNum` is 8.
 
 More details of the `PcieVhost` HDL component can be found in the [_pcievhost_ manual](https://github.com/wyvernSemi/pcievhost/blob/master/doc/pcieVHost.pdf).
 
@@ -472,7 +472,7 @@ private:
 
 ### Running the Model as an Endpoint
 
-The _pcievhost_ VIP was originally designed to generate PCIe traffic as a root complex. The addition of endpoint features was to allow a target for the main root complex model to be tested. This mainly consisted of the addition of a configuration space memory and for out generation of completions for both the internal memory model and  the configuratiion space. As such, the user program on the end point does not need to do very much if it does not need to instigate transactions but only respond. The code fragment below shows an abbreviated program running on a _pcievhost_ model.
+The _pcievhost_ VIP was originally designed to generate PCIe traffic as a root complex. The addition of endpoint features was to allow a target for the main root complex model to be tested, but can still be useful in environments testing RCs and switches. The additoinal features mainly consisted of the addition of a configuration space memory and for out generation of completions for both the internal memory model and  the configuratiion space. As such, the user program on the end point does not need to do very much if it does not need to instigate transactions but only respond. The code fragment below shows an abbreviated program running on a _pcievhost_ model.
 
 ```C
 #include <stdio.h>

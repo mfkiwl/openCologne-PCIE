@@ -79,8 +79,8 @@ assign led                             = 2'b00;
 //--------------------------------------------------------------
 
   pcieVHostPipex1 #(
-    .NodeNum                           (2),
-    .EndPoint                          (0)
+    .NodeNum                           (1),
+    .EndPoint                          (1)
   ) bfm_pcie
   (
     .pclk                              (pcieclk),

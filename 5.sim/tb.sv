@@ -112,8 +112,8 @@ module tb #(
 //--------------------------------------------------------------
 
   pcieVHostPipex1 #(
-    .NodeNum                           (1),
-    .EndPoint                          (1)
+    .NodeNum                           (2),
+    .EndPoint                          (0)
   ) bfm_pcie
   (
     .pclk                              (pcieclk),

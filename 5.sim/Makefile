@@ -10,9 +10,9 @@
 # Command line modifiable variables
 # --------------------------------------------
 
-USER_C           = VUserMain0.cpp VUserMain2.cpp ltssm.c
+USER_C           = VUserMain0.cpp VUserMain1.cpp ltssm.c
 USRCODEDIR       = $(CURDIR)/usercode
-PCIE_C           = VUserMain1.cpp
+PCIE_C           = VUserMain2.cpp
 PCIECODEDIR      = $(CURDIR)/usercode
 OPTFLAG          = -g
 # TOPFILELIST      = top.prj
