@@ -6,21 +6,21 @@ The project aims to take _openCologne_ to a new level, not only by introducing *
   <img width="30%" src="0.doc/artwork/openCologne-PCIE.png">
 </p>
 
-It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This is the only soft PCIE protocol stack in opensource at the moment.
+It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families, and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This is the only soft PCIE protocol stack in opensource at the moment.
 
-Our PCIE EP core comes with unique **HW/SW co-sim** and two **PCIE cards for GateMate**. The new boards can work with all three device variants: A1, A2, A4 and are plug-and-play compatible with vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
+Our PCIE EP core comes with unique **HW/SW co-sim** and two **PCIE cards for GateMate**. The new boards can host all three GateMate variants: A1, A2, A4 and are plug-and-play compatible with the vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
 
-The project aims for integration with LiteX, by expanding the [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio to create a strong foundation for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
+The project aims for integration with LiteX, by expanding [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio, thus creating a strong foundation for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
 
-Let's also note that this project is about creating a **minimal** PCIE EP stack. Its scope is therefore limited to a demonstration of the **PIO writes and reads** only. Other applications, such as DMA, are not in our deliverables, but can later on be built on top of the protocol stack that this project is about.
+To be fair, our project is about creating a **minimal** PCIE EP stack. Its scope is therefore limited to a demonstration of the **PIO writes and reads** only. Other applications, such as DMA, are not amongst the deliverables. They can later on be added on top of the protocol stack that this project is about.
 
 Power states and transitions are also not supported.
 
-While our commitment is to produce a **`Gen1`** EP, the design will from the get-go support Gen2 throughput -- We intend to try to bring it up on the best-effort bases, as a bonus. However, the procedures for automatic up- and down- training of the link speed will not be implemented.
+While our commitment is to produce a **`Gen1`** EP, the design will from the get-go support the Gen2 throughput -- We intend to, on the best-effort bases, as a bonus, try to bring up 5Gbps links. However, the procedures for automatic up- and down- training of the link speed will not be implemented.
 
 We **`only support x1 (single-lane)`** PCIE links. The link width training is therefore omitted.
 
-> GateMate die (A1) does not offer more than one SerDes anyway. While, in theory, the two-die A2 could support a 2-lane PCIE, that would turn everything on its head and become a major project of its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack alone, the A2 and A4 chips come into play as logic resources for implementation of the final user app.
+> The GateMate die (A1) does not come with more than one SerDes anyway. While, in theory, a two-die A2 could support a 2-lane PCIE, that would turn everything on its head and become a major project of its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack alone, the A2 and A4 chips come into play as the banks of logic resources for the final user app.
 
 <p align="center">
   <img width="50%" src="0.doc/diagrams/pcie-ep-top-stack.png">
@@ -33,9 +33,9 @@ We **`only support x1 (single-lane)`** PCIE links. The link width training is th
   <img width="60%" src="0.doc/images/PHY-Layers.JPG">
 </p>
 
-The GateMate SerDes has thus far not been used in the PCIE context. It is therefore reasonable to expect issues with physical layer, which may falter for signal integrity, jitter, or some other reason. Luckily, the project has teamed up with CologneChip developers, who will own the PHY layer up to and including **P**hysical **I**nterface for **P**CI **E**xpress (PIPE) 👍. We have even separated this technology-specific work into a directory of their own, see **`2.rtl.PHY`**.
+The GateMate SerDes has thus far not been used in the PCIE context. It is therefore reasonable to expect issues with physical layer, which may falter for signal integrity, jitter, or some other reason. Luckily, we has teamed up with CologneChip developers, who will own the PHY layer up to and including **P**hysical **I**nterface for **P**CI **E**xpress (PIPE) 👍. Their technology-specific work is clearly separated in a directory of their own, see **`2.rtl.PHY`**.
 
-> By adhering to PIPE architecture, we can clearly separate generic (i.e. "logic" only) from the FPGA-specific RTL. This does not mean that all of our RTL is portable to other vendors, but rather that it's structured in a way that facilitates future ports, with only a thin layer of code on the physical side of the PIPE interface that would need to be revisited. Being a small subsection of the overall design, we are thereby saving a good chunk of porting effort.
+> By adhering to PIPE architecture, we avoid mixing the generic (i.e. "logic" only) design part with FPGA-specific RTL. This does not mean that all of our RTL is portable to other vendors, but rather that it is structured in a way that facilitates future ports, with only a thin layer of code behind PIPE interface that needs to be revisited. That's a small subsection of the overall design, which thereby saves a good amount of porting effort.
 
 
 ## Future outlook
@@ -64,7 +64,7 @@ Reflecting on our roadmap and possible future growth paths, in addition to the a
 - [PCIE EP DMA - Wupper](https://gitlab.nikhef.nl/franss/wupper)
 - [Warp-pipe: PCIe network simulator](https://github.com/antmicro/warp-pipe)
 
-<ins>Note:</ins> _"opensource"_ PCIE EP designs in the above references are not truly opensource. They all rely on vendor-proprietary **PCIE HM**, which is a black box that provides _Transport Layer_ (TL) and _Data Link Layer_ (DLL) protocol stack. The insides of it are invisible and inaccessible to users, and also not portable to other FPGA families. We intend to fully replace that PCIE HM with soft, unencrypted, free to use and modify Verilog RTL.
+<ins>Note:</ins> _"opensource"_ PCIE EP designs in the above references are not truly opensource. They all rely on the vendor-proprietary **PCIE HM**, which is a black box that provides _Transport Layer_ (TL) and _Data Link Layer_ (DLL) protocol stack. Their insides are invisible and inaccessible, and also not portable to other FPGA families. We intend to fully replace their PCIE HMs with soft, unencrypted, free to use, modify and inspect System Verilog RTL.
 
 
 --------------------
@@ -88,10 +88,10 @@ Reflecting on our roadmap and possible future growth paths, in addition to the a
  
 - [ ] Develop opensource PHY with PIPE interface for GateMate SerDes
 >- [ ] x1, Gen1
->- [ ] x1, Gen2 (best-effort, it's a bonus if we make it)
+>- [ ] x1, Gen2 (best-effort, consider it a bonus if we make it)
 
-- [ ] Develop opensource RTL for PCIE EP DLL with PIPE interface
-- [ ] Develop opensource RTL for PCIE EP TL
+- [ ] Develop opensource RTL for PCIE EP DLL function, with PIPE interface
+- [ ] Develop opensource RTL for PCIE EP TL function
 
 - [ ] Create comprehensive co-sim testbench
 
@@ -128,30 +128,30 @@ The PCB part of the project shall deliver two cards: GateMate in **(i) PCIE "Slo
   <img width="35%" src="0.doc/images/NiteFury-PCIE-M2.JPG">
 </p>
 
-While the "Slot" variant is not critical, and could have been suplanted by using one of the ready-made adapters, 
+While the "Slot" variant is not critical, and could have been suplanted by one of the ready-made M.2-to-Slot adapters, 
 
 <p align="center">
   <img width="40%" src="0.doc/images/PCIE-Slot-to-M2-adapter.JPG">
 </p>
 
-it is more practical and less expensive not to have an interposer. "Slot" is still the dominant PCIE form-factor for desktops and servers. The M.2 is typically found in the laptops. Initially, we will use the existing [CM4 ULX4M](https://github.com/intergalaktik/ULX4M) with off-the-shelf I/O boards:
+it is more practical not to have an interposer. "Slot" is still the dominant PCIE form-factor for desktops and servers. The M.2 is typically found in the laptops. Initially, we will use the existing [CM4 ULX4M](https://github.com/intergalaktik/ULX4M) with off-the-shelf I/O boards:
 
 <p align="center">
   <img width="40%" src="0.doc/images/CM4-IO-with-PCIE-Slot.jpg">
   <img width="40%" src="0.doc/images/CM4-IO-with-PCIE-M2.jpg">
 </p>
 
-With our two new boards becoming ready, we will be gradually switching to openPCIE backplane which features:
+When our two new plug-in boards become available, we plan to gradually switch to our openPCIE backplane, which features:
 - Slots on one side
 - M.2s on the other
-- RootComplex as a plug-in card, for interoperability testing with [RaspberryPi](https://www.raspberrypi.com) and Xilinx Artix-7 .
-- on-board (soldered-down) PCIE Switch for interoperability testing in the most typical use-case, which is when RootPort is not directly connected to EndPoints, but goes through a Switch.
+- RootComplex also as a plug-in card (as opposed to the more typical soldered-down), for interoperability testing with [RaspberryPi](https://www.raspberrypi.com) and Xilinx Artix-7 .
+- on-board (soldered-down) PCIE Switch for interoperability testing of the most typical EP deployment scenario, which is when RootPort is not directly connected to EndPoints, but goes through a Switch.
 
 <p align="center">
   <img width="40%" src="0.doc/images/PCIE-interop-with-RPI5.png">
 </p>
 
-In the final step, we intend to test them within PC host, using both "Slot" and M.2 connectivity options. For additional detail, please jump to [1.pcb/README.md](1.pcb/README.md)
+In the final step, we intend to test them inside PC host, using both "Slot" and M.2 connectivity options. For additional detail, please jump to [1.pcb/README.md](1.pcb/README.md)
 
 
 --------------------
@@ -171,7 +171,7 @@ For additional detail, please jump to [2.rtl/README.md](2.rtl/README.md)
 - [PCIE Utils](https://mj.ucw.cz/sw/pciutils)
 - [Debug PCIE issues using 'lspci' and 'setpci'](https://adaptivesupport.amd.com/s/article/1148199?language=en_US)
 
-The purpose of the "Test App" is to put all hardware and software elements of the system together, and to demonstrate how it works in a typical end-to-end use case. The Test App will enumerate and configure the EndPoint, then perform a series of the PIO write-read-validate transactions over PCIE, perhaps toggling some LEDs. It is envisioned as a getting-started example for how to build more complex PCIE applications.
+The purpose of our "TestApp" is to put all hardware and software elements together, and to demonstrate how the system works in a typical end-to-end use case. The TestApp will enumerate and configure the EndPoint, then perform a series of the PIO write-read-validate transactions over PCIE, perhaps toggling some LEDs. It is envisioned as a getting-started example for how to contruct more complex PCIE applications.
 
 For as much as we’d like to make it 100% baremetal, i.e. fully decoupled from an underlying OS, Linux comes with such a rich set of PCIE goodies that it might be hard to write it all from scratch. It is therefore still TDB whether we will go _baremetal_, _bare-Linux_ (minimal, specifically built by us to fit project needs), _busybox_, or some other clever way that works around the standard Linux requirement for a hardware MMU. 
 
@@ -329,14 +329,14 @@ See [6.litex/README.md](6.litex/README.md)
 
 ### Acknowledgements
 
-We are grateful to **NLnet Foundation** for their sponsorship of this development activity.
+We are thankful to **NLnet Foundation** for their sponsorship of this development activity.
 
 <p align="center">
    <img src="https://github.com/chili-chips-ba/openeye/assets/67533663/18e7db5c-8c52-406b-a58e-8860caa327c2">
    <img width="115" alt="NGI-Entrust-Logo" src="https://github.com/chili-chips-ba/openeye-CamSI/assets/67533663/013684f5-d530-42ab-807d-b4afd34c1522">
 </p>
 
-The **wyvernSemi**'s wisdom and contribution made a great deal of difference -- Thank you, we are honored to have you on the project.
+The **wyvernSemi**'s wisdom and contribution mean a world of difference -- Thank you, we are honored to have you on the project.
 
 <p align="center">
    <img width="115" alt="wyvernSemi-Logo" src="https://github.com/user-attachments/assets/94858fce-081a-43b4-a593-d7d79ef38e13">
@@ -345,7 +345,7 @@ The **wyvernSemi**'s wisdom and contribution made a great deal of difference -- 
 
 ### Community outreach
 
-It is in a way more important for the dev community to know about such-and-such project or IP, than for the code to exists in some repo. Without awareness, which comes through presentations, postings, conferences, ..., the work that went into creating technical content is not fully accomplished.
+It is in a way more important for the dev community to know about such-and-such project or IP, than for the code to exists in some repo. Without awareness, which comes through presentations, postings, conferences, ..., the work that went into creating the technical content is not fully accomplished.
 
 We therefore plan on putting some time and effort into community outreach through multiple venues. One of them is the presence at industry fairs and conferences, such as:
 
