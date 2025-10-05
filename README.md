@@ -8,7 +8,7 @@ The project aims to take _openCologne_ to a new level, not only by introducing *
 
 It aims to complement _openPCIE RootComplex_ with a layered EndPoint that's portable to other FPGA families, and even to [OpenROAD](https://github.com/The-OpenROAD-Project) ASICs, leaving only the PHY in the hard-macro (HM) domain. This is the only soft PCIE protocol stack in opensource at the moment.
 
-Our PCIE EP core comes with unique **HW/SW co-sim** and two **PCIE cards for GateMate**. The new boards can host all three GateMate variants: A1, A2, A4 and are plug-and-play compatible with the vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
+Our PCIE EP core comes with unique **Verification IP (VIP)** and two **PCIE cards for GateMate**. The new boards can host all three GateMate variants: A1, A2, A4 and are plug-and-play compatible with the vast assortment of 3rd-party carriers, including our opensource [PCIE Backplane](https://github.com/chili-chips-ba/openPCIE/tree/main/1.pcb/openpci2-backplane). 
 
 The project aims for integration with LiteX, by expanding [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio, thus creating a strong foundation for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
 
@@ -175,9 +175,14 @@ For additional detail, please jump to [2.rtl/README.md](2.rtl/README.md)
 - [PCIE Utils](https://mj.ucw.cz/sw/pciutils)
 - [Debug PCIE issues using 'lspci' and 'setpci'](https://adaptivesupport.amd.com/s/article/1148199?language=en_US)
 
-The purpose of our "TestApp" is to put all hardware and software elements together, and to demonstrate how the system works in a typical end-to-end use case. The TestApp will enumerate and configure the EndPoint, then perform a series of the PIO write-read-validate transactions over PCIE, perhaps toggling some LEDs. It is envisioned as a getting-started example for how to contruct more complex PCIE applications.
+The purpose of our "TestApp" is to put all hardware and software elements together, and to demonstrate how the system works in a typical end-to-end use case. The TestApp will enumerate and configure the EndPoint, then perform a series of the PIO write-read-validate transactions over PCIE, perhaps toggling some LEDs. It is envisioned as a "Getting Started" example of how to construct more complex PCIE applications.
 
-For as much as we’d like to make it 100% baremetal, i.e. fully decoupled from an underlying OS, Linux comes with such a rich set of PCIE goodies that it might be hard to write it all from scratch. It is therefore still TDB whether we will go _baremetal_, _bare-Linux_ (minimal, specifically built by us to fit project needs), _busybox_, or some other clever way that works around the standard Linux requirement for a hardware MMU. 
+We plan on creating not one, but three such examples, for the three representative compute platforms:
+1) **Hard Embedded / Hosted**: RaspberryPi
+2) **Soft Embedded / BareMetal**: Artix-7 FPGA acting as a RootComplex with soft on-chip RISC-V CPU
+3) **General-purpose desktop/server class**: Linux PC
+
+The 100% baremetal (option#2) is still under investigation. While we hope to be able to write it all from scratch, given that Linux comes with such a rich set of PCIE goodies, we may end-up going with _bare-Linux_ (i.e. minimal, specifically built by us to fit project needs), _busybox_, or some other clever way that works around standard Linux requirement for a hardware MMU, and it does not come with large codespace expenditure.
 
 For additional detail, please jump to [3.sw/README.md](3.sw/README.md)
 
