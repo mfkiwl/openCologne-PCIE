@@ -22,9 +22,9 @@ We **`only support x1 (single-lane)`** PCIE links. The full link width training 
 
 > The GateMate die (A1) does not come with more than one SerDes anyway. While, in theory, a two-die A2 could support a 2-lane PCIE, that would turn everything on its head and become a major project of its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack alone, the A2 and A4 chips come into play as the banks of logic resources for the final user app.
 
-We **`only support one _Physical Function_ (PF0) and zero _Virtual Functions_ (VF)`**. No _Traffic Classes_ (TC) and no _Virtual Channels_ (VC) either.
+We **`only support one _Physical Function_ (PF0)`** and zero _Virtual Functions_ (VF). No _Traffic Classes_ (TC) and no _Virtual Channels_ (VC) either.
 
-On the other hand, the **Configuration Space** registers are contained within our PCIE IP core, but reduced to the bare-minimum, and hard-coded for most part. BARs are, of course programmable from the Root Port, of which only have the 32-bit option, and only one address window: BAR0.
+On the other hand, the **Configuration Space** registers are contained within our PCIE IP core, but reduced to the bare-minimum, and hard-coded for most part. BARs are, of course programmable from the Root Port, of which only have the 32-bit option, and only one address window: **BAR0**.
 
 <p align="center">
   <img width="50%" src="0.doc/diagrams/pcie-ep-top-stack.png">
