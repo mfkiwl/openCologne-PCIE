@@ -12,7 +12,11 @@ Our PCIE EP core comes with unique **Verification IP (VIP)** and two **PCIE card
 
 The project aims for integration with LiteX, by expanding [LitePCIE](https://github.com/enjoy-digital/litepcie) portfolio, thus creating a strong foundation for the complete, end-to-end, community maintained _openCompute_ PCIE ecosystem.
 
-To be fair, our project is about creating a **minimal** PCIE EP stack. Its scope is therefore limited to a demonstration of the **PIO writes and reads** only. Other applications, such as DMA, are not in our deliverables. They can later on be added on top of the protocol stack (i.e. PCIE "core") that this project is about.
+### Minimal, yet functional PCIE EP core
+ 
+The PCIE protocol is complex. It is also bloated -- Most of the real-life users don't use most of it 😇. To be fair, our project is about creating a minimal set of features, that is a barebones design that is still interoperable with the actual PCIE HW/SW systems out there.
+
+Its scope is therefore limited to a demonstration of the **PIO writes and reads** only. Other applications, such as DMA, are not in our deliverables. They can later on be added on top of the protocol stack (i.e. PCIE "core") that this project is about.
 
 Power states and transitions are also not supported.
 
@@ -22,9 +26,11 @@ We **`only support x1 (single-lane)`** PCIE links. The full link width training 
 
 > The GateMate die (A1) does not come with more than one SerDes anyway. While, in theory, a two-die A2 could support a 2-lane PCIE, that would turn everything on its head and become a major project of its own... one that would require splitting the PCIE protocol stack vertically, for implementation across two dice. Moreover, as we expect to consume most of the A1 for the PCIE stack alone, the A2 and A4 chips come into play as the banks of logic resources for the final user app.
 
-We **`only support one _Physical Function_ (PF0)`** and zero _Virtual Functions_ (VF). No _Traffic Classes_ (TC) and no _Virtual Channels_ (VC) either.
+We **`only support one Physical Function (PF0)`** and zero _Virtual Functions_ (VF). No _Traffic Classes_ (TC) and no _Virtual Channels_ (VC) either.
 
-On the other hand, the **Configuration Space** registers are contained within our PCIE IP core, but reduced to the bare-minimum, and hard-coded for most part. BARs are, of course programmable from the Root Port, of which only have the 32-bit option, and only one address window: **BAR0**.
+The **Configuration Space** registers, while retained in our PCIE IP core, are reduced to the bare-minimum, and hard-coded for most part. The _Base Address Registers_ (BARs) are, of course, programmable from the Root Port. We don't support 64-bit BARs, but only 32-bit, and only one address window: **BAR0**.
+
+### Design Blueprint
 
 <p align="center">
   <img width="50%" src="0.doc/diagrams/pcie-ep-top-stack.png">
