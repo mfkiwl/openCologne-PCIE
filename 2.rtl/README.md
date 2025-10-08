@@ -1,7 +1,21 @@
-# RTL Architecture
+# RTL Architecture (WIP)
 
-**[WIP]**
+#### References:
+- [liteFury PCIE EP](https://github.com/hdlguy/litefury_pcie)
+- [Wavelet-lab PCIE EP](https://github.com/wavelet-lab/usdr-fpga/tree/main/lib/pci)
+- [LitePCIE EP](https://github.com/enjoy-digital/litepcie)
+- [ECP5-PCIE EP](https://github.com/ECP5-PCIe/ECP5-PCIe)
+- [Yumewatari](https://github.com/whitequark/Yumewatari)
+- [Alex's PCIE EP](https://github.com/alexforencich/verilog-pcie)
+- [Alex's PCIE cocoTB](https://github.com/alexforencich/cocotbext-pcie)
+- [Regymm's PCIE_7x EP](https://github.com/regymm/pcie_7x)
+- [Anes' PCIE EP](https://github.com/chili-chips-ba/openPCIE/tree/main/2.rtl)
+- [PCIE EP DMA - Wupper](https://gitlab.nikhef.nl/franss/wupper)
+- [Warp-pipe: PCIe network simulator](https://github.com/antmicro/warp-pipe)
 
+<ins>Note:</ins> _"opensource"_ PCIE EP designs in the above references are not truly opensource. They all rely on the vendor-proprietary **PCIE HM**, which is a black box that provides _Transport Layer_ (TL) and _Data Link Layer_ (DLL) protocol stack. The HM insides are invisible and inaccessible, and also not portable to other FPGA families. We intend to fully replace these vendor-locked PCIE HMs with soft, unencrypted, free to use, free to modify and inspect, clean and very readable System Verilog RTL.
+
+------
 At the moment, this section is merely a scratchpad of our thoughts and ideas, team comments and suggestions..., from which we seek to define the structure, interfaces, partitioning. 
 
 **This is also an open, community-wide invite to jump on the train and contribute to this creation process...**
