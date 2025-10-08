@@ -5,6 +5,7 @@ This is work area for the PCB-related thoughts and explanations, including the s
 #### References:
 - [USB3 PHY for GateMate](https://nlnet.nl/project/GateMate-USB3-PHY)
 - [KiCad and openEMS](https://www.youtube.com/watch?v=VcJqhsbzR3c)
+- [Automated PCB trace selection for SI simulation](https://antmicro.com/blog/2024/07/automated-pcb-trace-selection-for-si-simulation)
 
 
 Just for illustration and to get the ball rolling, here is an earlier attemp at PCIE "Slot" EndPoint card. Stay tuned for more...
