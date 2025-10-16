@@ -14,8 +14,13 @@ This is work area for the CologneChip PHY PIPE developers.
 </p>
 
 <p align="center">
+  <img width="60%" src="0.doc/images/PHY-Layers-GateMate.png">
+</p>
+
+<p align="center">
   <img width="60%" src="0.doc/images/SerDes-BlockDiagram.png">
 </p>
+
 
 ## PIPE Interface Recap
 #### Signal Composition
