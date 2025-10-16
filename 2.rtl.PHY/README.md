@@ -17,6 +17,11 @@ This is work area for the CologneChip PHY PIPE developers.
   <img width="60%" src="0.doc/images/PHY-Layers-GateMate.png">
 </p>
 
+**Hai:**
+> _"... our PIPE interface does not contain any functionality of the so called "MAC layer" which handles the training sequences, OSs and LTSSM..."_
+
+Would it not be better to make it standard? We need to talk more about it...
+
 <p align="center">
   <img width="60%" src="0.doc/images/SerDes-BlockDiagram.png">
 </p>
