@@ -18,7 +18,7 @@ The PCIE protocol is complex. It is also bloated -- Most of the real-life users 
 
 Its scope is therefore limited to a demonstration of the **PIO writes and reads** only. Other applications, such as DMA, are not in our deliverables. They can later on be added on top of the protocol stack (i.e. PCIE "core") that this project is about.
 
-Power states and transitions are also not supported.
+The power states and transitions are supported only to the least extent possible, and primarily in relation to the mixed-signal SerDes, which is by definition the largest consumer. Our [PHY section](2.rtl.PHY/README.md) delves into that topic.
 
 While our commitment is to produce a **`Gen1`** EP, the design will from the get-go support the Gen2 throughput -- We intend to, on the best-effort bases, as a bonus, try to bring up 5Gbps links. However, the procedures for automatic up- and down- training of the link speed will not be implemented.
 
