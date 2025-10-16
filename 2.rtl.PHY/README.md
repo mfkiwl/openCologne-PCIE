@@ -10,7 +10,11 @@ This is work area for the CologneChip PHY PIPE developers.
 - [Mithro on SerDes](https://docs.google.com/presentation/d/e/2PACX-1vSgIGVCZtNt8RdifZXOLOJDDCj7g05zxr9WS2NjmQtM_E0GfZKCBYhASCto4eURL-86uNwJaXfo1qMC/pub?start=false&loop=false&delayms=3000#slide=id.g151286a907e_0_230)
 
 <p align="center">
-  <img width="60%" src="../0.doc/images/PHY-Layers.JPG">
+  <img width="60%" src="0.doc/images/PHY-Layers.jpg">
+</p>
+
+<p align="center">
+  <img width="60%" src="0.doc/images/SerDes-BlockDiagram.png">
 </p>
 
 ## PIPE Interface Recap
