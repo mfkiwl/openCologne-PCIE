@@ -10,7 +10,27 @@ At the moment, this section is merely a scratchpad of our thoughts and ideas, te
   <img width="50%" src="../0.doc/diagrams/pcie-ep-top-stack.png">
 </p>
 
+#### References:
+- [PCIE Primer](https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx/view) by Simon Southwell ✔
+- [PCIE-Technology3-0---MindSharePress2012](https://github.com/chili-chips-ba/openCologne-PCIE/blob/main/0.doc/PCIE-Technology3-0---MindSharePress2012.pdf)
+- [PCIE-base-spec, Rev2.1](https://github.com/chili-chips-ba/openCologne-PCIE/blob/main/0.doc/PCIE-base-spec.Rev2-1.pdf)
 
+  
+#### Examples:
+
+**[1]** Proprietary PCIE Core for Xilinx 7Series FPGA devices
+
+  - [Xilinx UG477 7series PCIE HM - User Guide](https://docs.amd.com/v/u/en-US/ug477_7Series_IntBlock_PCIe) ✔
+  - [Xilinx PG054 7series PCIE HM - Product Guide](https://www.xilinx.com/support/documents/ip_documentation/pcie_7x/v3_3/pg054-7series-pcie.pdf)
+  - [Xilinx DS821 7series_PCIE HM - Datasheet](https://docs.xilinx.com/v/u/en-US/ds821_7series_pcie)
+    
+> The Xilinx 7-series FPGAs Integrated block for PCIe sits in a similar space to the _openCologne-PCIE_ target implementation, but more highly configurable (e.g. root complex mode and muti-lanes etc.). It does have a user configurable configuration space, and LTSSM features upstream of the PIPE interface. It does serve, though, as an indicator of the complexity of requirements if _openCologne-PCIE_ is to be a viable open-source alternative. The links below are examples of open-source applications built on top of the vendor PCIE Hard-Macros (HM).
+> - [regymm pcie_7x](https://github.com/regymm/pcie_7x)
+> - [LiteFury pcie_7x](https://github.com/hdlguy/litefury_pcie)
+> - [wavelet-lab pcie_7x wrappers, with DMA](https://github.com/wavelet-lab/usdr-fpga/tree/main/lib/pci)
+> - [Wupper DMA for Xilinx PCIE HMs](https://gitlab.nikhef.nl/franss/wupper)
+> - [Alex's wrappers for Xilinx and Altera PCIE HMs, with DMA](https://github.com/alexforencich/verilog-pcie)
+> - [LitePCIE wrappers for vendor (Xilinx, Gowin, Lattice, ...) PCIE HMs](https://github.com/enjoy-digital/litepcie)
 
 ## 1) TL_IF
 ### Features and Support
@@ -19,24 +39,24 @@ At the moment, this section is merely a scratchpad of our thoughts and ideas, te
 
 | Feature | RX  support| TX support| Notes |
 |---------|----|----|-------|
-| Memory Reads 32 bit TLPs        | yes     | stage 2  | Must support reception       |
-| Memory Reads 64 bit TLPs        | yes     | stage 2  | Must support reception       |
-| Memory Writes 32 bit TLPs       | yes     | stage 2  | Must support reception       |
-| Memory Writes 64 bit TLPs       | yes     | stage 2  | Must support reception       |
-| Memory Reads Locked 32 bit TLPs | no      | stage 2? | Might not be required at all |
-| Memory Reads Locked 64 bit TLPs | no      | stage 2? | Might not be required at all |
-| I/O Reads TLPs                  | no      | no       | Legacy                       |
-| I/O Writes TLPs                 | no      | no       | Legacy                       |
-| Config Space 0 Reads            | yes     | no       | Must support reception       |
-| Config Space 0 Writes           | yes     | stage 2  | Must support reception       |
-| Config Space 1 Reads            | no      | no       | RCs and Switches only        |
-| Config Space 1 Writes           | no      | no       | RCs and Switches only        |
+| Memory Reads 32 bit TLPs        | ✔yes     | stage 2  | Must support reception       |
+| Memory Reads 64 bit TLPs        | ✘ no    | stage 2  | Must support reception       |
+| Memory Writes 32 bit TLPs       | ✔yes     | stage 2  | Must support reception       |
+| Memory Writes 64 bit TLPs       | ✘ no   | stage 2  | Must support reception       |
+| Memory Reads Locked 32 bit TLPs | ✘ no      | stage 2? | Might not be required at all |
+| Memory Reads Locked 64 bit TLPs | ✘ no      | stage 2? | Might not be required at all |
+| I/O Reads TLPs                  | ✘ no      | ✘ no       | Legacy                       |
+| I/O Writes TLPs                 | ✘ no      | ✘ no       | Legacy                       |
+| Config Space 0 Reads            | ✔yes     | ✘ no       | Must support reception       |
+| Config Space 0 Writes           | ✔yes     | stage 2  | Must support reception       |
+| Config Space 1 Reads            | ✘ no      | ✘ no       | RCs and Switches only        |
+| Config Space 1 Writes           | ✘ no      | ✘ no       | RCs and Switches only        |
 | Messages                        | yes?    | yes?     | What to do with received power messages? Generation of legacy interrupts messages? Generation of error messages required |
-| Completions                     | stage 2 | yes      | TX to respond to non-posted requests. TX of "unsupported request" completions for non-supported TLP types received |
-| Completions with data           | stage 2 | yes      | same as above with data |
+| Completions                     | stage 2 | ✔ yes      | TX to respond to non-posted requests. TX of "unsupported request" completions for non-supported TLP types received |
+| Completions with data           | stage 2 | ✔ yes      | same as above with data |
 | Part completions with data      | ???     | ???      | Splitting of returned burst data. Uplink may have set a maximum payload, but request a large read |
-| Completions for locked memory   | no      | no       | TX to respond to non-posted requests. TX of "unsupported request" completions for non-supported TLP types received |
-| Completions with data           | no      | no       | same as above with data |
+| Completions for locked memory   | ✘ no      | ✘ no       | TX to respond to non-posted requests. TX of "unsupported request" completions for non-supported TLP types received |
+| Completions with data           | ✘ no      | ✘ no       | same as above with data |
 
 Note that, when generating a memory request (not first delivery stage) if an address used is &lt; 2^32 a 32-bit TLP _must_ be used.
 
@@ -44,15 +64,15 @@ Note that, when generating a memory request (not first delivery stage) if an add
 
 | Feature | support| Notes |
 |---------|-------|-------|
-| Construction of TLP headers | yes | 3DW and 4DW |
-| Decode of TLP headers | yes | |
-| 32-bit CRC generation/check | yes | |
-| Capture of BUS and Device numbers | yes | Set on _every_ configurations write. Used to generate requester ID for non-completion TLPs or CID for completion TLPs |
-| Generation on ECRC digest | no | Requires extended PCIe capabilities structure |
-| Traffic classes           | no | Fix at 0 |
-| Auto-generation of tags   | yes | Incrementing count for each outstanding request |
-| ordering and cache coherency | no | fix attributes bits to 00b in headers |
-| GEN2 address type | no | Fix at 0 |
+| Construction of TLP headers | ✔ yes | 3DW and 4DW |
+| Decode of TLP headers | ✔ yes | |
+| 32-bit CRC generation/check | ✔ yes | |
+| Capture of BUS and Device numbers | ✔ yes | Set on _every_ configurations write. Used to generate requester ID for non-completion TLPs or CID for completion TLPs |
+| Generation on ECRC digest | ✘ no | Requires extended PCIe capabilities structure |
+| Traffic classes           | ✘ no | Fix at 0 |
+| Auto-generation of tags   | ✔ yes | Incrementing count for each outstanding request |
+| ordering and cache coherency | ✘ no | fix attributes bits to 00b in headers |
+| GEN2 address type | ✘ no | Fix at 0 |
 | Error/poisoned TLP | partial | Poisoned received packets must be deleted. Optional to generate. Optional to complete with a "completer abort". |
 
 #### Signal Composition
@@ -65,30 +85,30 @@ Note that, when generating a memory request (not first delivery stage) if an add
 
 | Feature | RX  support| TX support| Notes |
 |---------|------------|-----------|-------|
-| DLL link initialisation | all | all | |
-| InitFC1  | all | all | For all three types: P, NP, Cpl |
-| InitFC2  | all | all | For all three types: P, NP, Cpl |
-| UpdateFC | all | all | For all three types: P, NP, Cpl |
-| ACK      | all | all ||
-| NAK      | all | all ||
-| PM_Enter_L1  | ??? | no  | What to do on reception? |
-| PM_Enter_L23 | ??? | no  | What to do on reception? |
-| PM_Enter_Active State Request_L1  | ??? | no  | What to do on reception? |
-| PM_Request_Ack | no | ??? | required if power higher layer power management supported |
-| Vendor specific | no | no | |
+| DLL link initialisation | ✔ all | ✔ all | |
+| InitFC1  | ✔ all | ✔ all | For all three types: P, NP, Cpl |
+| InitFC2  | ✔ all | ✔ all | For all three types: P, NP, Cpl |
+| UpdateFC | ✔ all | ✔ all | For all three types: P, NP, Cpl |
+| ACK      | ✔ all | ✔ all ||
+| NAK      | ✔ all | ✔ all ||
+| PM_Enter_L1  | ??? | ✘ no  | What to do on reception? |
+| PM_Enter_L23 | ??? | ✘ no  | What to do on reception? |
+| PM_Enter_Active State Request_L1  | ??? | ✘ no  | What to do on reception? |
+| PM_Request_Ack | ✘ no | ??? | required if power higher layer power management supported |
+| Vendor specific | ✘ no | ✘ no | |
 
 #### Other internal features
 
 | Feature | support| Notes |
 |---------|-----|-------|
-| Framing TLPs between STP and END symbols | yes | |
-| Framing of DLLPs netween SDP and END symbols | yes | |
+| Framing TLPs between STP and END symbols | ✔ yes | |
+| Framing of DLLPs netween SDP and END symbols | ✔ yes | |
 | Nullified TLPs (with EBD in place of END | ??? | Not TX. Delete on RX? |
-| 16-bit CRC generation/check | yes | |
-| Retry buffering | yes | Packets held until ACK'd |
-| Error reporting | yes | TBD on extent. Connections to config space and generating error messages |
-| Flow control and Update FC generation | yes | |
-| UpdateFC timeout | yes | Maximum time since last UpdateFC (for a given type) forces an UpdateFC |
+| 16-bit CRC generation/check | ✔ yes | |
+| Retry buffering | ✔ yes | Packets held until ACK'd |
+| Error reporting | ✔ yes | TBD on extent. Connections to config space and generating error messages |
+| Flow control and Update FC generation | ✔ yes | |
+| UpdateFC timeout | ✔ yes | Maximum time since last UpdateFC (for a given type) forces an UpdateFC |
 
 #### Signal Composition
 #### Data Flow
@@ -108,25 +128,25 @@ From the top level README.md it seems that power management isn't to be initiall
 
 | Feature | RX  support| TX support| Notes |
 |---------|------------|-----------|-------|
-| TS1 training sequence | yes | yes | Variants with Link# and Lane# set to PAD; Link# a number and lane# set to PAD; link# a number lane# a number |
-| TS2 training sequence | yes | yes | link# a number lane# a number |
-| Electrical idle OS | yes | yes |
+| TS1 training sequence | ✔ yes | ✔ yes | Variants with Link# and Lane# set to PAD; Link# a number and lane# set to PAD; link# a number lane# a number |
+| TS2 training sequence | ✔ yes | ✔ yes | link# a number lane# a number |
+| Electrical idle OS | ✔ yes | ✔ yes |
 | Fast Training Sequence | ??? | ??? | Might not be needed |
-| Skip OS | yes | yes | |
-| IDL | yes | yes | 0 character pre-scramble and encoding |
-| Compliance pattern | no | |
+| Skip OS | ✔ yes | ✔ yes | |
+| IDL | ✔ yes | ✔ yes | 0 character pre-scramble and encoding |
+| Compliance pattern | ✘ no | |
 
 #### Other internal features
 
 | Feature | support| Notes |
 |---------|-----|-------|
-| SKIP OS counter | yes | needs to be sent at reqular intervals (between a min and max) oonce link is up |
+| SKIP OS counter | ✔ yes | needs to be sent at reqular intervals (between a min and max) oonce link is up |
 | NTFS | partial | TS OS needs a value set, so pick a fixed one |
 | Control bits | ??? | No TX requirement. How to respond to RX with bits set? |
 | Lane inversion | yes? | It is valid that a lanes diff pair are wire opposite |
 | Lane reversal | ??? | May not be applicable to a single lane but if connected to a wider link, may beed to set to a deifferemt value other than 0 on training |
 | LTSSM | partial | **Detect**, **polling**, **configuration**, and **L0** required. **Recovery** required to switch from GEN1 to another GEN. What to do if directed to any of the other states? |
-| PIPE interface | yes | | 
+| PIPE interface | ✔ yes | | 
 
 
 ## 4) PIPE
@@ -140,11 +160,11 @@ A configuration space is required for the device to be enumerated. Not all capab
 
 | Capability                                 | required?     | Size      | Notes |
 |--------------------------------------------|---------------|-----------|-------|
-| Type 0 PCI compatible capabilities         | required      | 16 DWORDS | Has some dynamic fields |
-| PCIe capabilities structure                | required      | 15 DWORDS | Only first 5 need implementing, rest return 0 |
-| Power management capabilities              | required      |  2 DWORDS | Has some dynamic fields |
-| MSI Capabilities structure                 | semi-optional |  5 DWORDS | Required if device capable of generating interrupts |
-| All other capabilites/extended capabilties | optional      | N/A       | |
+| Type 0 PCI compatible capabilities         | ✔ required      | 16 DWORDS | Has some dynamic fields |
+| PCIe capabilities structure                | ✔ required      | 15 DWORDS | Only first 5 need implementing, rest return 0 |
+| Power management capabilities              | ✔ required      |  2 DWORDS | Has some dynamic fields |
+| MSI Capabilities structure                 | ✘ semi-optional |  5 DWORDS | Required if device capable of generating interrupts |
+| All other capabilites/extended capabilties | ✘ optional      | N/A       | |
 
 #### Approaches to implementation.
 
@@ -180,13 +200,6 @@ A configuration space is required for the device to be enumerated. Not all capab
 Add brief description of how the RTL part of TestApp interacts with the PCIE Core.
 
 ## Miscellaneous Notes
-
-### An Example (proprietary) soft IP configurable PCIe interface
-
-The Xilinx 7 Series FPGAs Integrated block for PCIe sits in a similar space to the _openCologne-PCIE_ target implementation, but more highly configurable (e.g. root complex mode and muti-lanes etc.). It does have a user configurable configuration space, and LTSSM features upstream of the PIPE interface. It does serve, though, as an indicator of the complexity of requirements if _openCologne-PCIE_ is to be a viable open-source alternative. The links below are for documentation for this IP to serve as reference.
-
-   - [User Guide](https://docs.amd.com/v/u/en-US/ug477_7Series_IntBlock_PCIe)
-   - [LogicCore IP Product Guide](https://www.xilinx.com/support/documents/ip_documentation/pcie_7x/v3_3/pg054-7series-pcie.pdf)
 
 ### Notes on configuration space in architecture
 
