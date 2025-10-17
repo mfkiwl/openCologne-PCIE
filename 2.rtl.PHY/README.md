@@ -31,6 +31,7 @@ Would it not be better to make it standard? We need to talk more about it...
   <img width="60%" src="0.doc/images/optimizing-pcie-pipe-pwr-mgmt.png">
 </p>
 
+@HaiLuong01 and @pu-cc shall work out our plan for the extent of _Low Power_ (LP) support. After all, SerDes, as a mixed-signal HM, is the primary power consumer.
 
 ## PIPE Interface Recap
 #### Signal Composition
