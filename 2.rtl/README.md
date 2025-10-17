@@ -12,18 +12,16 @@ At the moment, this section is merely a scratchpad of our thoughts and ideas, te
 
 #### References:
 - [PCIE Primer](https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx/view) by Simon Southwell ✔
-- [PCIE-Technology3-0---MindSharePress2012](https://github.com/chili-chips-ba/openCologne-PCIE/blob/main/0.doc/PCIE-Technology3-0---MindSharePress2012.pdf)
-- [PCIE-base-spec, Rev2.1](https://github.com/chili-chips-ba/openCologne-PCIE/blob/main/0.doc/PCIE-base-spec.Rev2-1.pdf)
+- [PCIE Technology Rev3.0 (MindSharePress2012)](https://github.com/chili-chips-ba/openCologne-PCIE/blob/main/0.doc/PCIE-Technology3-0---MindSharePress2012.pdf)
+- [PCIE Base Spec Rev2.1](https://github.com/chili-chips-ba/openCologne-PCIE/blob/main/0.doc/PCIE-base-spec.Rev2-1.pdf)
 
   
 #### Examples:
 
-**[1]** Proprietary PCIE Core for Xilinx 7Series FPGA devices
-
+Proprietary PCIE Core for Xilinx 7Series FPGA devices
   - [Xilinx UG477 7series PCIE HM - User Guide](https://docs.amd.com/v/u/en-US/ug477_7Series_IntBlock_PCIe) ✔
   - [Xilinx PG054 7series PCIE HM - Product Guide](https://www.xilinx.com/support/documents/ip_documentation/pcie_7x/v3_3/pg054-7series-pcie.pdf)
-  - [Xilinx DS821 7series_PCIE HM - Datasheet](https://docs.xilinx.com/v/u/en-US/ds821_7series_pcie)
-    
+  - [Xilinx DS821 7series PCIE HM - Datasheet](https://docs.xilinx.com/v/u/en-US/ds821_7series_pcie)
 > The Xilinx 7-series FPGAs Integrated block for PCIe sits in a similar space to the _openCologne-PCIE_ target implementation, but more highly configurable (e.g. root complex mode and muti-lanes etc.). It does have a user configurable configuration space, and LTSSM features upstream of the PIPE interface. It does serve, though, as an indicator of the complexity of requirements if _openCologne-PCIE_ is to be a viable open-source alternative. The links below are examples of open-source applications built on top of the vendor PCIE Hard-Macros (HM).
 > - [regymm pcie_7x](https://github.com/regymm/pcie_7x)
 > - [LiteFury pcie_7x](https://github.com/hdlguy/litefury_pcie)
@@ -31,6 +29,7 @@ At the moment, this section is merely a scratchpad of our thoughts and ideas, te
 > - [Wupper DMA for Xilinx PCIE HMs](https://gitlab.nikhef.nl/franss/wupper)
 > - [Alex's wrappers for Xilinx and Altera PCIE HMs, with DMA](https://github.com/alexforencich/verilog-pcie)
 > - [LitePCIE wrappers for vendor (Xilinx, Gowin, Lattice, ...) PCIE HMs](https://github.com/enjoy-digital/litepcie)
+
 
 ## 1) TL_IF
 ### Features and Support
