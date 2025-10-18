@@ -32,7 +32,7 @@ The **Configuration Space** registers, while retained in our PCIE IP core, are r
 
 ### References:
 
-- **[PCIE Primer](https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx/view) by Simon Southwell**
+- **[PCIE Primer](https://drive.google.com/file/d/1CECftcznLwcKDADtjpHhW13-IBHTZVXx/view) by Simon Southwell** ✔
 
   
 ### Design Blueprint
@@ -45,7 +45,7 @@ The **Configuration Space** registers, while retained in our PCIE IP core, are r
 # PIPE (is not a dream)
 
 <p align="center">
-  <img width="60%" src="0.doc/images/PHY-Layers.JPG">
+  <img width="60%" src="2.rtl.PHY/0.doc/images/PHY-Layers.jpg">
 </p>
 
 The GateMate SerDes has thus far not been used in the PCIE context. It is therefore reasonable to expect issues with physical layer, which may falter for signal integrity, jitter, or some other reason. Luckily, we have teamed up with CologneChip developers, who will own the PHY layer up to and including **P**hysical **I**nterface for **P**CI **E**xpress (PIPE) 👍. This technology-specific work is clearly separated in a directory of their own, see **`2.rtl.PHY`**.
@@ -66,7 +66,7 @@ Reflecting on our roadmap and possible future growth paths, in addition to the a
 
 # Project Status
 
-- [x] Procure Test equipment, test fixtures, dev boards and accessories
+- [x] ✔ Procure Test equipment, test fixtures, dev boards and accessories
 
 - [ ] Create docs and diagrams that are easy to follow and comprehend
 >- [ ] RTL DLL and TL
